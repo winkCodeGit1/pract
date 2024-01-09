@@ -1,0 +1,83 @@
+/* Calendar.css */
+
+.calendar-container {
+  min-width: 650px;
+  margin: 0 auto;
+  padding-inline: 16px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  margin-top: 20px;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+  place-items: center;
+}
+
+.calendar-day {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #e4e2e2;
+  background-color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.calendar-day:not(.disabled):hover {
+  border: 1px dotted rgb(218, 236, 255);
+  box-shadow: rgb(134 195 255) 0px 0px 2px;
+}
+
+.calendar-day.hovered.morning:not(.disabled) {
+  border: 1px dashed #038003;
+  box-shadow: rgb(134 195 255) 0px 0px 2px;
+}
+.calendar-day.evening.hovered:not(.disabled) {
+  border: 1px dashed #fca909;
+  box-shadow: rgb(134 195 255) 0px 0px 2px;
+}
+.calendar-day.night.hovered:not(.disabled) {
+  border: 1px dashed #7c9caa;
+  box-shadow: rgb(134 195 255) 0px 0px 2px;
+}
+
+.calendar-day.disabled:hover {
+  cursor: not-allowed;
+}
+.calendar-container .selected {
+  color: #fff;
+}
+
+.calendar-container .calendar-day.morning.selected.hovered,
+.calendar-container .calendar-day.morning.selected {
+  background-color: #038003;
+}
+
+.calendar-container .calendar-day.evening.selected.hovered,
+.calendar-container .calendar-day.evening.selected {
+  background-color: #fca909;
+}
+
+.calendar-container .calendar-day.night.selected.hovered,
+.calendar-container .calendar-day.night.selected {
+  background-color: #7c9caa;
+}
+
+.calendar .day-of-week {
+  cursor: pointer;
+}
+.calendar-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.calendar-container li {
+  margin: 5px 0;
+}
