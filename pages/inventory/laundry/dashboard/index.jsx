@@ -2,20 +2,19 @@
 import { Add } from '@mui/icons-material';
 import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
 import { Avatar, Button, Divider, MenuItem, Paper, Stack, Typography } from '@mui/material';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 
 //Local imports
 import Table from 'components/table';
 //api
+import useAuth from 'hooks/useAuth';
 import { linenOrderGetAll, linenOrderSave } from 'pages/api/laundry';
+import { toast } from 'react-toastify';
+import { failedSaveMessage, saveMessage } from 'utils/constants';
 import LinenManagement from '../laundry/LinenManagement';
 import LinenReceipt from './LinenReceipt';
 import Receive from './Receive';
-import useAuth from 'hooks/useAuth';
-import { failedSaveMessage, saveMessage } from 'utils/constants';
-import { toast } from 'react-toastify';
 
 const statusMap = {
   1: { label: 'Collection', color: 'primary' },
@@ -104,17 +103,18 @@ export default function Laundry({ path }) {
   });
 
   const handleSubmitLinenOrder = (req) => {
+    console.log(req, '---req');
     const reqData = {
       id: 0,
-      collectionLocation: req?.location.id,
-      deptCollectedFrom: req?.department?.departId,
-      staffIdCollectedFrom: 1,
+      collectionLocation: req.location.id,
+      deptCollectedFrom: req.department?.departId,
+      staffIdCollectedFrom: req.staff?.id,
       linenOrderDetailsDtos: req.linen?.map((e, i) => ({
         id: i,
-        linenItemId: e?.LinenItemCode?.id,
+        linenItemId: e.LinenItemCode?.id,
         orderQty: e.Qty,
         orderUom: 1,
-        linenProcessId: e?.Processed?.id,
+        linenProcessId: e.Processed?.id,
         lastUpdatedBy: user.staffId,
       })),
     };
@@ -144,15 +144,6 @@ export default function Laundry({ path }) {
           loading={mutation.isPending}
         />
       )}
-
-      {/* {openLinenOrderCollection && (
-        <LinenManagement
-          onClose={handleCloseLinenOrder}
-          row={selectedRow}
-          type='LinenOrder'
-          onSubmitLinenOrder={handleSubmitLinenOrder}
-        />
-      )} */}
 
       {openReceive && (
         <Receive
