@@ -1,4 +1,13 @@
-import { Grid, IconButton, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import {
+  Grid,
+  IconButton,
+  LinearProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useFieldArray, useForm } from 'react-hook-form';
 //
@@ -219,58 +228,70 @@ export default function LinenManagement({ onClose, row, type, onSubmitLinenOrder
             )}
           </TableHead>
 
-          <TableBody>
-            {fields.map((field, index) => (
-              <TableRow key={field.id}>
-                <TableCell style={{ maxWidth: 200 }}>
-                  <RHFAutoComplete
-                    name={`linen[${index}].LinenItemCode`}
-                    options={linenItemCodeList.data}
-                    placeholder='Select Linen Item Code'
-                    disabled={type === 'LinenSupply' && true}
-                  />
-                </TableCell>
+          {type === 'LinenOrder' || (type === 'LinenSupply' && row && getLinenOrderData) ? (
+            <TableBody>
+              {fields.map((field, index) => (
+                <TableRow key={field.id}>
+                  <TableCell style={{ maxWidth: 200 }}>
+                    <RHFAutoComplete
+                      name={`linen[${index}].LinenItemCode`}
+                      options={linenItemCodeList.data}
+                      placeholder='Select Linen Item Code'
+                      disabled={type === 'LinenSupply'}
+                    />
+                  </TableCell>
 
-                <TableCell style={{ maxWidth: 150 }}>
-                  <RHFTextField
-                    name={`linen[${index}].Qty`}
-                    disabled={type === 'LinenSupply' && true}
-                    onInput={(e) => {
-                      restrict.number(e);
-                    }}
-                  />
-                </TableCell>
-
-                <TableCell style={{ maxWidth: 200 }}>
-                  <RHFAutoComplete
-                    name={`linen[${index}].Processed`}
-                    options={linenProcessList.data}
-                    placeholder='Select Processed Status'
-                    disabled={type === 'LinenSupply' && true}
-                  />
-                </TableCell>
-
-                {type === 'LinenSupply' && (
-                  <TableCell style={{ maxWidth: 10 }}>
+                  <TableCell style={{ maxWidth: 150 }}>
                     <RHFTextField
-                      name={`linen[${index}].SupplyQty`}
+                      name={`linen[${index}].Qty`}
+                      disabled={type === 'LinenSupply'}
                       onInput={(e) => {
                         restrict.number(e);
                       }}
                     />
                   </TableCell>
-                )}
 
-                {type !== 'LinenSupply' && (
-                  <TableCell style={{ maxWidth: 60 }}>
-                    <IconButton color='error' onClick={() => remove(index)} disabled={index === 0}>
-                      <DeleteIcon disable={index === 0} />
-                    </IconButton>
+                  <TableCell style={{ maxWidth: 200 }}>
+                    <RHFAutoComplete
+                      name={`linen[${index}].Processed`}
+                      options={linenProcessList.data}
+                      placeholder='Select Processed Status'
+                      disabled={type === 'LinenSupply'}
+                    />
                   </TableCell>
-                )}
-              </TableRow>
-            ))}
-          </TableBody>
+
+                  {type === 'LinenSupply' && (
+                    <TableCell style={{ maxWidth: 10 }}>
+                      <RHFTextField
+                        name={`linen[${index}].SupplyQty`}
+                        onInput={(e) => {
+                          restrict.number(e);
+                        }}
+                      />
+                    </TableCell>
+                  )}
+
+                  {type !== 'LinenSupply' && (
+                    <TableCell style={{ maxWidth: 60 }}>
+                      <IconButton
+                        color='error'
+                        onClick={() => remove(index)}
+                        disabled={index === 0}
+                      >
+                        <DeleteIcon disable={index === 0} />
+                      </IconButton>
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          ) : (
+            <TableBody>
+              <TableCell colSpan={4}>
+                <LinearProgress color='primary' />
+              </TableCell>
+            </TableBody>
+          )}
         </Table>
       </FormProvider>
     </FormWrapper>
