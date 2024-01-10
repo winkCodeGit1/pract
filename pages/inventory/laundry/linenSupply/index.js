@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
-import { Avatar, Chip, Divider, Link, Paper, Stack, Typography } from '@mui/material';
+import { Avatar, Button, Divider, Paper, Stack, Typography } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Table from 'components/table';
 import { linenOrderGetAll, linenSupplySave } from 'pages/api/laundry';
@@ -102,7 +102,7 @@ export default function LinenSupply({ path }) {
       id: 0,
       supplyLocation: data.location?.id,
       deptSuppliedTo: data.department?.departId,
-      staffIdSuppliedTo: 1,
+      staffIdSuppliedTo: data.staff?.id,
       dtos: data.linen?.map((e, i) => ({
         id: i,
         linenOrderDetailsId: e.id,
@@ -151,17 +151,18 @@ export default function LinenSupply({ path }) {
         data={data}
         enableRowActions
         renderRowActions={({ row }) => (
-          <Stack direction='row' spacing={1}>
-            <Chip
-              label='Supply'
-              variant='outlined'
-              color='primary'
+          <Stack direction='row' spacing={2} p={1}>
+            <Button
+              variant='contained'
               size='small'
+              style={{ borderRadius: '5px' }}
               onClick={() => {
                 setSelectedRow(row.original);
                 setOpenDetails(true);
               }}
-            />
+            >
+              Supply
+            </Button>
           </Stack>
         )}
       />
